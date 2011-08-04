@@ -1,0 +1,178 @@
+/**
+ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * This file is part of CSipSimple.
+ *
+ *  CSipSimple is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  CSipSimple is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.csipsimple.ui;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+
+import com.sonetel.R;
+//import com.csipsimple.R;
+import com.csipsimple.api.ISipService;
+import com.csipsimple.api.SipManager;
+import com.csipsimple.api.SipProfile;
+import com.csipsimple.service.SipService;
+import com.csipsimple.utils.Log;
+import com.csipsimple.widgets.EditSipUri;
+import com.csipsimple.widgets.EditSipUri.ToCall;
+
+public class PickupSipUri extends Activity implements OnClickListener {
+
+	private static final String THIS_FILE = "PickupUri";
+	private EditSipUri sipUri;
+	private Button okBtn;
+	private BroadcastReceiver registrationReceiver;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.pickup_uri);
+		
+		
+		//Set window size
+		LayoutParams params = getWindow().getAttributes();
+		params.width = LayoutParams.FILL_PARENT;
+		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+		
+		//Set title
+		((TextView) findViewById(R.id.my_title)).setText(R.string.pickup_sip_uri);
+		((ImageView) findViewById(R.id.my_icon)).setImageResource(android.R.drawable.ic_menu_call);
+		
+		
+		okBtn = (Button) findViewById(R.id.ok);
+		okBtn.setOnClickListener(this);
+		Button btn = (Button) findViewById(R.id.cancel);
+		btn.setOnClickListener(this);
+
+		
+		sipUri = (EditSipUri) findViewById(R.id.sip_uri);
+		sipUri.getTextField().setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView tv, int action, KeyEvent arg2) {
+				if(action == EditorInfo.IME_ACTION_GO) {
+					sendPositiveResult();
+					return true;
+				}
+				return false;
+			}
+		});
+		
+		registrationReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				updateRegistrations();
+			}
+		};
+		
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d(THIS_FILE, "Resume pickup URI");
+		// Bind service
+		bindService(new Intent(this, SipService.class), connection, Context.BIND_AUTO_CREATE);
+		registerReceiver(registrationReceiver, new IntentFilter(SipManager.ACTION_SIP_REGISTRATION_CHANGED));
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		// Unbind service
+		try {
+			unbindService(connection);
+		}catch (Exception e) {
+			//Just ignore that -- TODO : should be more clean
+		}
+
+		try {
+			unregisterReceiver(registrationReceiver);
+		} catch (Exception e) {
+			// Nothing to do here -- TODO : should be more clean
+		}
+	}
+	
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()) {
+		case R.id.ok:
+			sendPositiveResult();
+			break;
+		case R.id.cancel:
+			setResult(RESULT_CANCELED);
+			finish();
+			break;
+		}
+	}
+
+	private void sendPositiveResult() {
+		Intent resultValue = new Intent();
+		 ToCall result = sipUri.getValue();
+		 if(result != null) {
+			 resultValue.putExtra(Intent.EXTRA_PHONE_NUMBER,
+						result.getCallee());
+			 resultValue.putExtra(SipProfile.FIELD_ACC_ID,
+						result.getAccountId());
+			 setResult(RESULT_OK, resultValue);
+		 }else {
+			setResult(RESULT_CANCELED);
+		 }
+		finish();
+	}
+	
+	private ISipService service;
+	private ServiceConnection connection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
+			service = ISipService.Stub.asInterface(arg1);
+			sipUri.updateService(service);
+			updateRegistrations();
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			service = null;
+		}
+
+	};
+	
+	private void updateRegistrations(){
+		sipUri.updateRegistration();
+	}
+	
+}

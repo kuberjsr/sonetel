@@ -1,0 +1,113 @@
+/**
+ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * This file is part of CSipSimple.
+ *
+ *  CSipSimple is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  CSipSimple is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  This file and this file only is released under dual Apache license
+ */
+package com.csipsimple.api;
+import com.csipsimple.api.SipProfileState;
+import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.MediaState;
+
+interface ISipService{
+	/**
+	* Get the current API version
+	* @return version number. 1000 x major version + minor version
+	* Each major version must be compatible with all versions of the same major version
+	*/
+	int getVersion();
+
+	//Stack control
+	/**
+	* Start the sip stack
+	*/
+	void sipStart();
+	/**
+	* Stop the sip stack
+	*/
+	void sipStop();
+	/**
+	* Force to stop the sip service (stack + everything that goes arround stack)
+	*/
+	void forceStopService();
+	/**
+	* Restart the sip stack
+	*/
+	void askThreadedRestart();
+	
+	//Account control
+	/**
+	* Add all accounts available in database and marked active to running sip stack (loaded previously using sipStart)
+	*/
+	void addAllAccounts();
+	/**
+	* Remove all accounts from running sip stack (this does nothing in database)
+	*/
+	void removeAllAccounts();
+	/**
+	* remove and add all accounts available in database and marked active
+	*/
+	void reAddAllAccounts();
+	/**
+	* Change registration for a given account/profile id (id in database)
+	* @param accountId the account for which we'd like to change the registration state
+	* @param renew 0 if we don't want to unregister, 1 to renew registration
+	*/
+	void setAccountRegistration(int accountId, int renew);
+	/**
+	* Get registration state for a given account id
+	* @param accountId the account/profile id for which we'd like to get the info (in database)
+	* @return the Profile state
+	*/ 
+	SipProfileState getSipProfileState(int accountId);
+	
+	//Call configuration control
+	void switchToAutoAnswer();
+	
+	//Call control
+	void makeCall(in String callee, int accountId);
+	int answer(int callId, int status);
+	int hangup(int callId, int status);
+	int sendDtmf(int callId, int keyCode);
+	int hold(int callId);
+	int reinvite(int callId, boolean unhold);
+	int xfer(int callId, in String callee);
+	int xferReplace(int callId, int otherCallId, int options);
+	SipCallSession getCallInfo(int callId);
+	SipCallSession[] getCalls();
+	
+	//Media control
+	void setMicrophoneMute(boolean on);
+	void setSpeakerphoneOn(boolean on);
+	void setBluetoothOn(boolean on);
+	void confAdjustTxLevel(int port, float value);
+	void confAdjustRxLevel(int port, float value);
+	void setEchoCancellation(boolean on);
+	void adjustVolume(in SipCallSession callInfo, int direction, int flags);
+	MediaState getCurrentMediaState();
+	
+	//Record calls
+	void startRecording(int callId);
+	void stopRecording();
+	int getRecordedCall();
+	boolean canRecord(int callId);
+	
+	//SMS
+	void sendMessage(String msg, String toNumber, int accountId);
+	
+	//Secure
+	void zrtpSASVerified();
+}

@@ -1,0 +1,132 @@
+/**
+ * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * This file is part of CSipSimple.
+ *
+ *  CSipSimple is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  CSipSimple is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.csipsimple.wizards.impl;
+
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import android.preference.ListPreference;
+
+import com.sonetel.R;
+//import com.csipsimple.R;
+import com.csipsimple.api.SipProfile;
+
+
+public class VoipMS extends SimpleImplementation {
+	
+	
+	@Override
+	protected String getDefaultName() {
+		return "VoIP.ms";
+	}
+	
+	ListPreference sipServer; 
+	static SortedMap<String, String[]> providers = new TreeMap<String, String[]>(){
+		private static final long serialVersionUID = -2561302247222706262L;
+	{
+		put("Atlanta, GA", new String[] {"atlanta.voip.ms"});
+		put("Chicago, IL", new String[] {"chicago.voip.ms"});
+		put("Dallas, TX", new String[] {"dallas.voip.ms"});
+		put("Houston, TX", new String[] {"houston.voip.ms"});
+		put("Los Angeles, CA", new String[] {"losangeles.voip.ms"});
+		put("New York, NY", new String[] {"newyork.voip.ms"});
+		put("Seattle, WA", new String[] {"seattle.voip.ms"});
+		put("Tampa, FL", new String[] {"tampa.voip.ms"});
+		put("Montreal 2,QC", new String[] {"montreal2.voip.ms"});
+		put("Toronto 2, ON", new String[] {"toronto2.voip.ms"});
+		put("Montreal,QC", new String[] {"montreal.voip.ms"});
+		put("Toronto, ON", new String[] {"toronto.voip.ms"});
+		put("London, UK", new String[] {"london.voip.ms"});
+	}
+	};
+
+	private static final String PROVIDER_LIST_KEY = "provider_list";
+	
+	@Override
+	public void fillLayout(final SipProfile account) {
+		super.fillLayout(account);
+		
+		
+		boolean recycle = true;
+		sipServer = (ListPreference) parent.findPreference(PROVIDER_LIST_KEY);
+		if(sipServer == null) {
+			sipServer = new ListPreference(parent);
+			sipServer.setKey(PROVIDER_LIST_KEY);
+			recycle = false;
+		}
+		
+		CharSequence[] e = new CharSequence[providers.size()];
+		CharSequence[] v = new CharSequence[providers.size()];
+        int i = 0;
+        for(String pv : providers.keySet()) {
+        	e[i] = pv;
+        	v[i] = ((String[]) providers.get(pv))[0];
+        	i++;
+        }
+		
+		sipServer.setEntries(e);
+		sipServer.setEntryValues(v);
+		sipServer.setDialogTitle(R.string.w_common_server);
+		sipServer.setTitle(R.string.w_common_server);
+		sipServer.setDefaultValue("atlanta.voip.ms");
+		
+        String domain = account.reg_uri;
+        if( domain != null ) {
+	        for(CharSequence state : v) {
+	        	String currentComp = "sip:"+state;
+	        	if( currentComp.equalsIgnoreCase(domain) ) {
+	        		sipServer.setValue((String) state);
+	        		break;
+	        	}
+	        }
+        }
+        
+        if(!recycle) {
+            parent.getPreferenceScreen().addPreference(sipServer);
+    	}
+   }
+
+
+	protected String getDomain() {
+		String provider = sipServer.getValue();
+		if(provider != null) {
+			return provider;
+		}
+		return "";
+	}
+	
+	@Override
+	public void updateDescriptions() {
+		super.updateDescriptions();
+		setStringFieldSummary(PROVIDER_LIST_KEY);
+	}
+
+	@Override
+	public String getDefaultFieldSummary(String fieldName) {
+		if(fieldName == PROVIDER_LIST_KEY) {
+			if(sipServer != null) {
+				return sipServer.getEntry().toString();
+			}
+		}
+		
+		return super.getDefaultFieldSummary(fieldName);
+	}
+
+
+
+}
