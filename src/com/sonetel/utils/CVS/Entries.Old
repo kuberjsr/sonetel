@@ -1,0 +1,41 @@
+/Compatibility.java/1.1.1.1/Fri Oct 18 14:34:25 2013//
+D/accessibility////
+D/audio////
+D/backup////
+D/bluetooth////
+D/clipboard////
+D/contacts////
+D/keyguard////
+D/video////
+/AccountListUtils.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/ArrayUtils.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/Base64.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/CallHandlerPlugin.java/1.1.1.1/Wed Sep  4 19:14:30 2013//
+/CallLogHelper.java/1.1.1.1/Tue Apr 23 10:31:23 2013//
+/CallsUtils.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/CollectLogs.java/1.1.1.1/Thu Mar 14 08:20:39 2013//
+/Columns.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/ContactsAsyncHelper.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/CustomDistribution.java/1.1.1.1/Wed May 29 10:48:51 2013//
+/DialingFeedback.java/1.1.1.1/Mon May 20 07:45:37 2013//
+/ExtraPlugins.java/1.1.1.1/Tue Apr 23 10:31:23 2013//
+/Log.java/1.1.1.1/Thu Sep  5 09:26:41 2013//
+/MD5.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/NightlyUpdater.java/1.1.1.1/Tue Apr 23 10:31:22 2013//
+/PhoneCapabilityTester.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/PreferencesProviderWrapper.java/1.1.1.1/Wed Sep  4 17:46:34 2013//
+/PreferencesProviderWrapper.java.mine/1.1.1.1/Tue Apr 23 10:31:23 2013//
+/PreferencesProviderWrapper.java.r1926/1.1.1.1/Tue Apr 23 10:31:23 2013//
+/PreferencesProviderWrapper.java.r2200/1.1.1.1/Tue Apr 23 10:31:23 2013//
+/PreferencesWrapper.java.mine/1.1.1.1/Tue Apr 23 10:31:22 2013//
+/PreferencesWrapper.java.r1926/1.1.1.1/Tue Apr 23 10:31:22 2013//
+/PreferencesWrapper.java.r2200/1.1.1.1/Tue Apr 23 10:31:22 2013//
+/RewriterPlugin.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/Ringer.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/SipProfileJson.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/SmileyParser.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/Theme.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/Threading.java/1.1.1.1/Mon Oct  1 07:41:58 2012//
+/TimerWrapper.java/1.1.1.1/Tue Apr 23 10:31:23 2013//
+/UriUtils.java/1.1.1.1/Tue May 14 09:32:29 2013//
+/PreferencesWrapper.java/1.2/Tue Oct 29 16:32:24 2013//

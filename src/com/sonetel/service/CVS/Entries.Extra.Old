@@ -1,0 +1,12 @@
+/SipService.java////
+D/impl////
+D/receiver////
+/DeviceStateReceiver.java////
+/Downloader.java////
+/HeadsetButtonReceiver.java////
+/MediaManager.java////
+/OutgoingCall.java////
+/PreferenceProvider.java////
+/PresenceManager.java////
+/SipWakeLock.java////
+/SipNotifications.java////

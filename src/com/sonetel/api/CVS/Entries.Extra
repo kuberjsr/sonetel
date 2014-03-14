@@ -1,0 +1,15 @@
+/ISipConfiguration.aidl////
+/ISipService.aidl////
+/MediaState.aidl////
+/MediaState.java////
+/NOTICE.txt////
+/SipCallSession.aidl////
+/SipCallSession.java////
+/SipConfigManager.java////
+/SipManager.java////
+/SipMessage.java////
+/SipProfile.aidl////
+/SipProfile.java////
+/SipProfileState.aidl////
+/SipProfileState.java////
+/SipUri.java////
