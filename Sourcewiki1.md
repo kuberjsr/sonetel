@@ -1,0 +1,1 @@
+Source code for the Sonetel app will soon be made available at this site. The source code can be requested from Sonetel by sending an email to android@sonetel.com

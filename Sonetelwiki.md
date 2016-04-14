@@ -1,0 +1,1 @@
+The sonetel wiki is available [here](http://www.sonetel.com/site/pmwiki.php?n=Admin.Admin).

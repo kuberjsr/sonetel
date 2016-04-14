@@ -1,0 +1,1 @@
+For issues related to the Sonetel app, use instructions provided [here](http://www.sonetel.com/site/pmwiki.php?n=Support.Support).

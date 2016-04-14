@@ -1,0 +1,1 @@
+The latest version of the app can be downloaded [here](http://www.sonetel.com/android).
